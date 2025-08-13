@@ -65,6 +65,9 @@ The application follows a layered architecture:
    # Optional: Box MCP Server URL
    VITE_BOX_MCP_SERVER_URL=https://your-box-mcp-server.example.com
    
+   # OpenAI API Configuration
+   VITE_OPENAI_API_KEY=your_openai_key
+   
    # Optional: Debug mode
    VITE_DEBUG=false
    ```
