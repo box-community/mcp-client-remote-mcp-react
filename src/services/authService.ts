@@ -15,14 +15,14 @@ class AuthService {
       clientId: import.meta.env.VITE_BOX_CLIENT_ID || '',
       clientSecret: import.meta.env.VITE_BOX_CLIENT_SECRET || '',
       redirectUri: import.meta.env.VITE_BOX_REDIRECT_URI || `${window.location.origin}/auth/callback`,
-      scope: 'root_readwrite'
+      scope: 'root_readwrite ai.readwrite'
     };
   }
 
   async initiateOAuth(): Promise<void> {
     const codeVerifier = generateCodeVerifier();
     const codeChallenge = await generateCodeChallenge(codeVerifier);
-    
+
     localStorage.setItem(this.STORAGE_KEYS.CODE_VERIFIER, codeVerifier);
 
     const params = new URLSearchParams({
@@ -126,7 +126,7 @@ class AuthService {
   getAccessToken(): string | null {
     const encryptedToken = localStorage.getItem(this.STORAGE_KEYS.TOKEN);
     if (!encryptedToken) return null;
-    
+
     const expiry = localStorage.getItem(this.STORAGE_KEYS.TOKEN_EXPIRY);
     if (expiry && Date.now() > parseInt(expiry)) {
       this.clearTokens();
@@ -143,10 +143,10 @@ class AuthService {
 
   private storeToken(tokenData: TokenResponse): void {
     const expiryTime = Date.now() + (tokenData.expires_in * 1000);
-    
+
     localStorage.setItem(this.STORAGE_KEYS.TOKEN, encryptToken(tokenData.access_token));
     localStorage.setItem(this.STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
-    
+
     if (tokenData.refresh_token) {
       localStorage.setItem(this.STORAGE_KEYS.REFRESH_TOKEN, encryptToken(tokenData.refresh_token));
     }
@@ -175,7 +175,7 @@ class AuthService {
           responseBody: errorBody,
           hasToken: !!token
         });
-        
+
         if (response.status === 401) {
           const newToken = await this.refreshToken();
           if (newToken) {
@@ -205,8 +205,8 @@ class AuthService {
   }
 
   private generateState(): string {
-    return Math.random().toString(36).substring(2, 15) + 
-           Math.random().toString(36).substring(2, 15);
+    return Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
   }
 }
 
