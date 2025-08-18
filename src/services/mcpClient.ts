@@ -23,9 +23,7 @@ class MCPClientService {
     }
 
     // Check if we have a valid MCP server URL
-    if (!this.serverUrl || 
-        this.serverUrl === 'https://your-box-mcp-server.example.com' || 
-        this.serverUrl === 'https://box-mcp-server.example.com') {
+    if (!this.serverUrl) {
       console.warn('No valid MCP server configured, using mock session for development');
       // Create a mock session for development
       this.session = {
@@ -127,7 +125,7 @@ class MCPClientService {
     // Instead, they provide tools. Let's return information about available tools
     // and suggest how to use them.
     const tools = this.session.availableTools || [];
-    
+
     if (tools.length === 0) {
       return {
         jsonrpc: '2.0',
@@ -151,7 +149,7 @@ class MCPClientService {
 
     // Provide information about available tools
     const toolsList = tools.map(tool => `• ${tool.name}: ${tool.description}`).join('\n');
-    
+
     return {
       jsonrpc: '2.0',
       id: this.generateRequestId(),
@@ -172,7 +170,7 @@ class MCPClientService {
     // Parse command like "!tool toolname param1=value1 param2=value2"
     const parts = command.slice(6).trim().split(' '); // Remove "!tool "
     const toolName = parts[0];
-    
+
     if (!toolName) {
       return {
         jsonrpc: '2.0',
@@ -327,10 +325,10 @@ class MCPClientService {
 
     // First check for session ID in headers
     const sessionId = response.headers.get('Mcp-Session-Id') ||
-                     response.headers.get('session-id') || 
-                     response.headers.get('x-session-id') ||
-                     response.headers.get('mcp-session-id');
-    
+      response.headers.get('session-id') ||
+      response.headers.get('x-session-id') ||
+      response.headers.get('mcp-session-id');
+
     if (sessionId) {
       console.log('Found session ID in header:', sessionId);
       return { sessionId };
@@ -340,20 +338,20 @@ class MCPClientService {
     try {
       const responseBody = await response.text();
       console.log('Response body:', responseBody);
-      
+
       const jsonResponse = JSON.parse(responseBody);
-      
+
       // Check for session ID in response body
       if (jsonResponse.result?.sessionId) {
         console.log('Found session ID in response body:', jsonResponse.result.sessionId);
-        return { 
+        return {
           sessionId: jsonResponse.result.sessionId,
           serverCapabilities: jsonResponse.result.capabilities || {}
         };
       }
       if (jsonResponse.sessionId) {
         console.log('Found session ID in response body:', jsonResponse.sessionId);
-        return { 
+        return {
           sessionId: jsonResponse.sessionId,
           serverCapabilities: jsonResponse.capabilities || {}
         };
@@ -363,12 +361,12 @@ class MCPClientService {
       if (jsonResponse.result && jsonResponse.jsonrpc === '2.0' && jsonResponse.result.protocolVersion) {
         console.log('Valid MCP initialize response received, generating session ID');
         const generatedSessionId = `session_${jsonResponse.id || Date.now()}`;
-        return { 
+        return {
           sessionId: generatedSessionId,
           serverCapabilities: jsonResponse.result.capabilities || {}
         };
       }
-      
+
       throw new Error('Invalid MCP response format');
     } catch (e) {
       console.error('Could not parse response body as JSON:', e);
@@ -398,7 +396,7 @@ class MCPClientService {
 
   private async getAvailableTools(): Promise<any[]> {
     console.log('Fetching tools list from MCP server...');
-    
+
     const request: MCPRequest = {
       jsonrpc: '2.0',
       id: this.generateRequestId(),
@@ -426,7 +424,7 @@ class MCPClientService {
     };
 
     const toolsResponse = await this.sendRequest(request);
-    
+
     const resourcesRequest: MCPRequest = {
       jsonrpc: '2.0',
       id: this.generateRequestId(),
@@ -476,7 +474,7 @@ class MCPClientService {
     }
 
     const responseData: MCPResponse = await response.json();
-    
+
     if (responseData.error) {
       throw new Error(`MCP Error: ${responseData.error.message}`);
     }
