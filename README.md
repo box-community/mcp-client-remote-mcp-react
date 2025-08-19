@@ -16,16 +16,15 @@ A React-based client application for interacting with Box through the Model Cont
 ## Architecture
 
 ```
-React App → AI Service (Claude) → MCP Client → Box MCP Server
-                ↓
-           Box AI APIs
+React App → AI Service (Claude) → MCP Client → Box MCP Server → Box AI APIs
 ```
 
 The application follows a layered architecture:
 - **Presentation Layer**: React components with styled-components
 - **AI Service Layer**: Claude (Anthropic) integration for conversational responses
-- **Service Layer**: Authentication, MCP client, and Box AI services
-- **Integration Layer**: Box API, Box AI API, and MCP protocol handlers
+- **Service Layer**: Authentication and MCP client services
+- **MCP Server Layer**: Box MCP Server handles tool execution and Box API integration
+- **Integration Layer**: Box APIs (including Box AI) accessed via MCP tools
 
 ## Tech Stack
 
