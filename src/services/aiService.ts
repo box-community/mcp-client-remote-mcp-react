@@ -8,7 +8,7 @@ type LocalMsg =
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL =
-  import.meta.env.VITE_ANTHROPIC_MODEL || 'claude-3-5-sonnet-latest';
+  import.meta.env.VITE_ANTHROPIC_MODEL || 'claude-opus-4-1-20250805';
 const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string;
 
 if (!ANTHROPIC_API_KEY) {
