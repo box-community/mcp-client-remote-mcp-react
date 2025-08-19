@@ -30,9 +30,9 @@ class MCPClientService {
         sessionId: 'mock-session-' + Date.now(),
         connected: true,
         serverCapabilities: {
-          prompts: { listChanged: false },
-          resources: { subscribe: false, listChanged: false },
-          tools: { listChanged: false }
+          prompts: [],
+          resources: [],
+          tools: []
         }
       };
       return this.session;
