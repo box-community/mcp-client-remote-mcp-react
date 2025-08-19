@@ -51,7 +51,7 @@ The application follows a layered architecture:
 1. **Clone and install dependencies:**
    ```bash
    git clone <repository-url>
-   cd box-mcp-client-react
+   cd mcp-client-remote-mcp-react
    npm install
    ```
 
